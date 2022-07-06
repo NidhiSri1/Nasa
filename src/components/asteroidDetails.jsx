@@ -6,6 +6,7 @@ import {
     Linking,
     StyleSheet,
     TouchableOpacity,
+    
 } from "react-native";
 import { useNavigate } from "react-router-native";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,7 +14,8 @@ import { useDispatch, useSelector } from "react-redux";
 export const AsteroidDetails = () => {
     const navigate = useNavigate();
     const selector = useSelector((store) => store.asteroid_det);
-    console.log(selector.is_potentially_hazardous_asteroid);
+    const loading = useSelector((store) => store.loading);
+    // console.log(selector.is_potentially_hazardous_asteroid);
     return (
         <>
             <View style={styles.div}>

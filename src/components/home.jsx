@@ -8,20 +8,23 @@ import {
     Image,
     TextInput,
     TouchableOpacity,
+    ActivityIndicator,
 } from "react-native";
 import { useNavigate } from "react-router-native";
-import { add_asteroid_list } from "../Redux/action";
+import { add_asteroid_list, loading } from "../Redux/action";
 
 export const Home = () => {
     const navigate = useNavigate();
     const [id, setId] = useState();
     const [disabled, setDisable] = useState(true);
+    const waiting = useSelector((store) => store.loading);
 
     const dispatch = useDispatch();
     const selector = useSelector((store) => store.asteroid_det);
-    console.log(id);
+
+    console.log("id", id);
     const handleChange = (e) => {
-        console.log(e);
+        // console.log(e);
         if (e === undefined) {
             setDisable(true);
         } else {
@@ -32,7 +35,6 @@ export const Home = () => {
 
     const handleSubmit = async () => {
         if (id !== undefined) {
-            // console.log("ji", id);
             try {
                 let response = await axios.get(
                     `https://api.nasa.gov/neo/rest/v1/neo/${id}?api_key=tHCqLdNS3GWe508ZlSP6zVFpt9l7dut0Uvwv00Rr`
@@ -50,6 +52,7 @@ export const Home = () => {
     };
 
     const handleRandomId = async () => {
+        dispatch(loading(true));
         try {
             let response = await axios.get(
                 `https://api.nasa.gov/neo/rest/v1/neo/browse?api_key=tHCqLdNS3GWe508ZlSP6zVFpt9l7dut0Uvwv00Rr`
@@ -65,7 +68,12 @@ export const Home = () => {
                 response.data.near_earth_objects[randomNumber].neo_reference_id
             );
 
-            handleSubmit();
+            if (id === undefined) {
+                alert("Please click again");
+                dispatch(loading(false));
+            } else {
+                handleSubmit();
+            }
         } catch (err) {
             console.log(err);
         }
@@ -92,9 +100,13 @@ export const Home = () => {
                     style={styles.button}
                     onPress={handleRandomId}
                 >
-                    <View>
-                        <Text style={styles.texts}>Random Asteroid ID</Text>
-                    </View>
+                    {waiting ? (
+                        <ActivityIndicator size="small" />
+                    ) : (
+                        <View>
+                            <Text style={styles.texts}>Random Asteroid ID</Text>
+                        </View>
+                    )}
                 </TouchableOpacity>
             </View>
         </>
