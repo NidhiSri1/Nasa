@@ -97,7 +97,7 @@ export const Home = () => {
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    style={styles.button}
+                    style={styles.buttons}
                     onPress={handleRandomId}
                 >
                     {waiting ? (
@@ -142,5 +142,13 @@ const styles = StyleSheet.create({
         color: "white",
         alignSelf: "center",
         padding: 9,
+    },
+    buttons: {
+        backgroundColor: "#457b9d",
+        alignSelf: "center",
+        marginVertical: 20,
+        height: 40,
+        borderRadius: 10,
+        width: "90%",
     },
 });
